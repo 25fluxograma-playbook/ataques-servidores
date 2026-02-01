@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anexo D - Playbook de Resposta a Incidentes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #060b41;
+            --secondary: #033dfa;
+            --critico: #b70c0c;
+            --alto: #ff540d;
+            --medio: #ffc400;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', sans-serif; }
+        
+        body { 
+            background: linear-gradient(135deg, var(--primary), var(--secondary)); 
+            color: #333; 
+            padding: 40px 20px; 
+            min-height: 100vh; 
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; }
+
+        header { text-align: center; margin-bottom: 50px; color: white; }
+        header h1 { font-size: 2.5rem; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        header p { font-size: 1.1rem; opacity: 0.9; }
+
+        /* Grid de Cards */
+        .cards-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 25px; 
+        }
+
+        .card { 
+            background: white; 
+            border-radius: 15px; 
+            padding: 25px; 
+            cursor: pointer; 
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
+            border-top: 8px solid;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
+        
+        /* Cores Temáticas dos Cards */
+        .c-acesso { border-top-color: var(--critico); }
+        .c-dados { border-top-color: #9d0000; }
+        .c-lateral { border-top-color: var(--alto); }
+        .c-recursos { border-top-color: #e67e22; }
+        .c-ddos { border-top-color: #2980b9; }
+        .c-dos { border-top-color: #16a085; }
+
+        .card h3 { margin-bottom: 15px; color: var(--primary); font-size: 1.4rem; }
+        .card p { font-size: 0.95rem; color: #555; line-height: 1.5; flex-grow: 1; margin-bottom: 15px; }
+        
+        .badge { 
+            align-self: flex-start; 
+            padding: 5px 12px; 
+            border-radius: 20px; 
+            font-size: 0.75rem; 
+            font-weight: bold; 
+            text-transform: uppercase;
+            color: white;
+        }
+
+        /* Modais */
+        .modal { 
+            display: none; 
+            position: fixed; 
+            z-index: 1000; 
+            left: 0; top: 0; 
+            width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.8); 
+            backdrop-filter: blur(5px);
+            overflow-y: auto; 
+        }
+
+        .modal-content { 
+            background: white; 
+            margin: 50px auto; 
+            padding: 40px; 
+            width: 90%; 
+            max-width: 850px; 
+            border-radius: 20px; 
+            position: relative;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+
+        .close { position: absolute; top: 20px; right: 25px; font-size: 2rem; cursor: pointer; color: #666; }
+
+        .modal-header { border-bottom: 2px solid #eee; margin-bottom: 25px; padding-bottom: 10px; }
+        .modal-header h2 { color: var(--primary); }
+
+        .section { margin-bottom: 25px; }
+        .section h4 { color: #444; margin-bottom: 10px; display: flex; align-items: center; }
+        .section h4::before { content: '▹'; margin-right: 8px; color: var(--secondary); font-weight: bold; }
+        
+        .playbook-steps { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 15px; 
+            background: #f9f9f9; 
+            padding: 20px; 
+            border-radius: 10px; 
+        }
+
+        .step { font-size: 0.9rem; line-height: 1.4; }
+        .step strong { color: var(--primary); display: block; margin-bottom: 3px; }
+
+        .tools-container { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        .tool-tag { 
+            background: var(--primary); 
+            color: white; 
+            padding: 6px 14px; 
+            border-radius: 5px; 
+            font-size: 0.85rem; 
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>TIPOS DE ATAQUES</h1>
+        <p>Ações e ferramentas baseadas na classificação do incidente (NIST SP 800-61)</p>
+    </header>
+
+    <div class="cards-grid">
+        <div class="card c-acesso" onclick="openModal('m-acesso')">
+            <h3>Acesso e Controle</h3>
+            <p>Comprometimento de credenciais, elevação de privilégios e controle de contas administrativas.</p>
+            <span class="badge" style="background: var(--critico);">Crítico</span>
+        </div>
+
+        <div class="card c-dados" onclick="openModal('m-dados')">
+            <h3>Roubo de Dados</h3>
+            <p>Exfiltração de informações sensíveis, bancos de dados ou propriedade intelectual.</p>
+            <span class="badge" style="background: var(--critico);">Crítico</span>
+        </div>
+
+        <div class="card c-lateral" onclick="openModal('m-lateral')">
+            <h3>Movimentação Lateral</h3>
+            <p>Uso de um sistema comprometido para infiltrar-se em outros ativos da rede interna.</p>
+            <span class="badge" style="background: var(--alto);">Alto</span>
+        </div>
+
+        <div class="card c-recursos" onclick="openModal('m-recursos')">
+            <h3>Apropriação de Recursos</h3>
+            <p>Uso indevido do hardware para mineração de criptoativos ou participação em botnets.</p>
+            <span class="badge" style="background: var(--alto);">Alto</span>
+        </div>
+
+        <div class="card c-ddos" onclick="openModal('m-ddos')">
+            <h3>Ataque DDoS</h3>
+            <p>Negação de serviço distribuída visando a saturação de banda ou recursos externos.</p>
+            <span class="badge" style="background: var(--alto);">Alto</span>
+        </div>
+
+        <div class="card c-dos" onclick="openModal('m-dos')">
+            <h3>Ataque DoS</h3>
+            <p>Negação de serviço local ou via exploração de vulnerabilidade de software.</p>
+            <span class="badge" style="background: var(--medio);">Médio</span>
+        </div>
+    </div>
+</div>
+
+<div id="m-acesso" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('m-acesso')">&times;</span>
+        <div class="modal-header"><h2>Acesso e Controle</h2></div>
+        <div class="section">
+            <h4>Descrição do Vetor</h4>
+            <p>Invasão via Brute Force, Credential Stuffing ou exploração de RDP/SSH sem MFA.</p>
+        </div>
+        <div class="section">
+            <h4>Ações do Playbook (NIST)</h4>
+            <div class="playbook-steps">
+                <div class="step"><strong>Contenção:</strong> Bloqueio da conta, reset de MFA e logout de sessões.</div>
+                <div class="step"><strong>Erradicação:</strong> Auditoria de regras de e-mail e remoção de backdoors.</div>
+                <div class="step"><strong>Recuperação:</strong> Reset de credenciais e validação de permissões.</div>
+            </div>
+        </div>
+        <div class="section">
+            <h4>Ferramentas de Mitigação</h4>
+            <div class="tools-container">
+                <span class="tool-tag">Microsoft Entra ID</span>
+                <span class="tool-tag">CyberArk PAM</span>
+                <span class="tool-tag">Okta</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="m-dados" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('m-dados')">&times;</span>
+        <div class="modal-header"><h2>Roubo de Dados (Exfiltração)</h2></div>
+        <div class="section">
+            <h4>Descrição do Vetor</h4>
+            <p>Transferência de grandes volumes de dados via protocolos como HTTPS, FTP ou DNS Tunneling.</p>
+        </div>
+        <div class="section">
+            <h4>Ações do Playbook (NIST)</h4>
+            <div class="playbook-steps">
+                <div class="step"><strong>Contenção:</strong> Isolamento do host e bloqueio de tráfego de saída (Egress).</div>
+                <div class="step"><strong>Erradicação:</strong> Identificação do script de exfiltração e limpeza de C2.</div>
+                <div class="step"><strong>Recuperação:</strong> Auditoria de logs (DLP) para mensurar o impacto.</div>
+            </div>
+        </div>
+        <div class="section">
+            <h4>Ferramentas de Mitigação</h4>
+            <div class="tools-container">
+                <span class="tool-tag">Digital Guardian</span>
+                <span class="tool-tag">Forcepoint DLP</span>
+                <span class="tool-tag">Varonis</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="m-lateral" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('m-lateral')">&times;</span>
+        <div class="modal-header"><h2>Movimentação Lateral</h2></div>
+        <div class="section">
+            <h4>Descrição do Vetor</h4>
+            <p>Exploração de protocolos como SMB, RPC e WMI para saltar entre servidores internos.</p>
+        </div>
+        <div class="section">
+            <h4>Ações do Playbook (NIST)</h4>
+            <div class="playbook-steps">
+                <div class="step"><strong>Contenção:</strong> Microsegmentação de rede e isolamento de VLANs.</div>
+                <div class="step"><strong>Erradicação:</strong> Remoção de tickets Kerberos e ferramentas de hacking.</div>
+                <div class="step"><strong>Recuperação:</strong> Implementação de políticas de Least Privilege.</div>
+            </div>
+        </div>
+        <div class="section">
+            <h4>Ferramentas de Mitigação</h4>
+            <div class="tools-container">
+                <span class="tool-tag">VMware NSX</span>
+                <span class="tool-tag">CrowdStrike EDR</span>
+                <span class="tool-tag">Darktrace</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="m-recursos" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('m-recursos')">&times;</span>
+        <div class="modal-header"><h2>Apropriação de Recursos</h2></div>
+        <div class="section">
+            <h4>Descrição do Vetor</h4>
+            <p>Injeção de binários de mineração (Cryptojacking) ou scripts de automação de botnets.</p>
+        </div>
+        <div class="section">
+            <h4>Ações do Playbook (NIST)</h4>
+            <div class="playbook-steps">
+                <div class="step"><strong>Contenção:</strong> Encerramento de processos de alta CPU e suspensão de cronjobs.</div>
+                <div class="step"><strong>Erradicação:</strong> Remoção de arquivos maliciosos e bins ocultos.</div>
+                <div class="step"><strong>Recuperação:</strong> Monitoramento de performance e patching do OS.</div>
+            </div>
+        </div>
+        <div class="section">
+            <h4>Ferramentas de Mitigação</h4>
+            <div class="tools-container">
+                <span class="tool-tag">Zabbix</span>
+                <span class="tool-tag">Sysdig</span>
+                <span class="tool-tag">Tenable.io</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="m-ddos" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('m-ddos')">&times;</span>
+        <div class="modal-header"><h2>Ataque DDoS (Distribuído)</h2></div>
+        <div class="section">
+            <h4>Descrição do Vetor</h4>
+            <p>Ataques volumétricos externos (UDP/TCP Flood) ou de Camada 7 (HTTP Flood).</p>
+        </div>
+        <div class="section">
+            <h4>Ações do Playbook (NIST)</h4>
+            <div class="playbook-steps">
+                <div class="step"><strong>Detecção:</strong> Alerta de SIEM por anomalia de tráfego.</div>
+                <div class="step"><strong>Contenção:</strong> Ativação de Scrubbing Center e Geo-blocking.</div>
+                <div class="step"><strong>Recuperação:</strong> Limpeza de caches e monitoramento de banda.</div>
+            </div>
+        </div>
+        <div class="section">
+            <h4>Ferramentas de Mitigação</h4>
+            <div class="tools-container">
+                <span class="tool-tag">Cloudflare</span>
+                <span class="tool-tag">AWS Shield</span>
+                <span class="tool-tag">Arbor Networks</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="m-dos" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('m-dos')">&times;</span>
+        <div class="modal-header"><h2>Ataque DoS (Local)</h2></div>
+        <div class="section">
+            <h4>Descrição do Vetor</h4>
+            <p>Esgotamento de recursos de um serviço específico através de vulnerabilidades conhecidas.</p>
+        </div>
+        <div class="section">
+            <h4>Ações do Playbook (NIST)</h4>
+            <div class="playbook-steps">
+                <div class="step"><strong>Contenção:</strong> Rate Limiting local e filtragem de IPs ofensivos.</div>
+                <div class="step"><strong>Erradicação:</strong> Aplicação de patches de software e hardening.</div>
+                <div class="step"><strong>Recuperação:</strong> Reinicialização controlada de serviços.</div>
+            </div>
+        </div>
+        <div class="section">
+            <h4>Ferramentas de Mitigação</h4>
+            <div class="tools-container">
+                <span class="tool-tag">Fail2Ban</span>
+                <span class="tool-tag">Iptables</span>
+                <span class="tool-tag">F5 WAF</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openModal(id) { document.getElementById(id).style.display = "block"; }
+    function closeModal(id) { document.getElementById(id).style.display = "none"; }
+    window.onclick = function(event) { if (event.target.className === 'modal') { event.target.style.display = "none"; } }
+</script>
+
+</body>
+</html>
