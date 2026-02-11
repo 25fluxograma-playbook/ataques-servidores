@@ -29,6 +29,20 @@
         header h1 { font-size: 2.5rem; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
         header p { font-size: 1.1rem; opacity: 0.9; }
 
+        .img-container { 
+            width: 100%; 
+            text-align: center; 
+            margin-bottom: 20px; 
+            background: #eee; 
+            padding: 10px 0; 
+        }
+
+
+        .img-container img { 
+            max-width: 100%; 
+            height: auto; 
+        }
+
         /* Grid de Cards */
         .cards-grid { 
             display: grid; 
@@ -93,6 +107,7 @@
             position: relative;
             animation: slideIn 0.3s ease-out;
         }
+        h4 { margin-top: 25px; margin-bottom: 15px; border-bottom: 1px solid #ccc; /* linha cinza clara */ padding-bottom: 5px; }
 
         @keyframes slideIn { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -109,7 +124,7 @@
             display: grid; 
             grid-template-columns: 1fr 1fr; 
             gap: 15px; 
-            background: #f9f9f9; 
+            background: #E5E5E5; 
             padding: 20px; 
             border-radius: 10px; 
         }
@@ -133,30 +148,32 @@
 <div class="container">
     <header>
         <h1>TIPOS DE ATAQUES</h1>
-        <p>Ações e ferramentas baseadas na classificação do incidente (NIST SP 800-61)</p>
+        <p>Ações de cada vetor de ataque.</p>
     </header>
 
     <div class="cards-grid">
         <div class="card c-acesso" onclick="openModal('m-acesso')">
-            <h3>Acesso e Controle</h3>
+            <h3>Acesso e Controle de Privilégios</h3>
+            
+
             <p>Comprometimento de credenciais, elevação de privilégios e controle de contas administrativas.</p>
             <span class="badge" style="background: var(--critico);">Crítico</span>
         </div>
 
         <div class="card c-dados" onclick="openModal('m-dados')">
-            <h3>Roubo de Dados</h3>
+            <h3>Roubo de Dados e Exfiltração</h3>
             <p>Exfiltração de informações sensíveis, bancos de dados ou propriedade intelectual.</p>
             <span class="badge" style="background: var(--critico);">Crítico</span>
         </div>
 
         <div class="card c-lateral" onclick="openModal('m-lateral')">
-            <h3>Movimentação Lateral</h3>
+            <h3>Persistência e Movimentação Lateral</h3>
             <p>Uso de um sistema comprometido para infiltrar-se em outros ativos da rede interna.</p>
             <span class="badge" style="background: var(--alto);">Alto</span>
         </div>
 
         <div class="card c-recursos" onclick="openModal('m-recursos')">
-            <h3>Apropriação de Recursos</h3>
+            <h3> Infraestrutura e Abuso de Recursos </h3>
             <p>Uso indevido do hardware para mineração de criptoativos ou participação em botnets.</p>
             <span class="badge" style="background: var(--alto);">Alto</span>
         </div>
@@ -178,26 +195,44 @@
 <div id="m-acesso" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal('m-acesso')">&times;</span>
-        <div class="modal-header"><h2>Acesso e Controle</h2></div>
+        <div class="modal-header"><h2>Acesso e Controle de Privilégios</h2></div>
+        <div class="img-container">
+                <img src="acesso.jpg" alt="Acesso e controle">
+            </div>
         <div class="section">
             <h4>Descrição do Vetor</h4>
-            <p>Invasão via Brute Force, Credential Stuffing ou exploração de RDP/SSH sem MFA.</p>
+            <p>Ele gerencia privilégios administrativos e de usuários, aplicando o princípio do menor privilégio para evitar escalonamento de ataques e roubo de dados. </p>
         </div>
         <div class="section">
-            <h4>Ações do Playbook (NIST)</h4>
+            <h4>Ações </h4>
+            <p>O acesso e controle de privilégios em servidores envolvem a gestão rigorosa de permissões, limitando o acesso a sistemas críticos apenas ao necessário (princípio do menor privilégio) para evitar ataques cibernéticos e vazamentos de dados. O uso de soluções de PAM (Privileged Access Management) é essencial para monitorar e registrar atividades de administradores. </p>
+            <br>
+            <h4><strong>Principais Aspectos da Gestão de Acessos e Privilégios</strong></h4>
+            <ul>
+                <li><strong>Controle de Acesso Baseado em Funções (RBAC):</strong>Define permissões com base nas funções dos usuários, facilitando a gestão e garantindo que cada um tenha apenas o necessário para sua função.
+                </li>
+                <li><strong>Princípio do Menor Privilégio:</strong>Limita o acesso de usuários a informações e recursos estritamente necessários para o desempenho de suas tarefas, minimizando riscos.</li>
+                 <li><strong>Gerenciamento de Acesso Privilegiado (PAM):</strong> Protege contra ameaças, monitorando, detectando e impedindo acesso não autorizado a recursos críticos.</li>
+  <li><strong>Monitoramento e Auditoria:</strong> As atividades de usuários com altos privilégios (como root ou admin) devem ser rastreadas e gravadas, incluindo comandos e acessos remotos.</li>
+  <li><strong>Cofre de Senhas:</strong> Solução para armazenar e gerenciar credenciais privilegiadas, permitindo a rotação automática de senhas e a verificação de acesso, incluindo contas não nominais.</li>
+  <li><strong>Autenticação Forte:</strong> Implementação de camadas de autenticação, como múltiplos fatores, mesmo para perfis com altos privilégios.</li>
+<br>
+            </ul>
+            <h4><strong>Melhores Práticas:</strong></h4>
+<ul>
+  <li><strong>Definir papéis e responsabilidades:</strong> de forma clara.</li>
+  <li><strong>Revisar e auditar permissões:</strong> regularmente para remover privilégios desnecessários.</li>
+  <li><strong>Implementar autenticação forte e multifator (MFA):</strong> para acesso a servidores.</li>
+  <li><strong>Automatizar atribuição de funções:</strong> para evitar erros manuais.</li>
+  <li><strong>Utilizar cofres de senhas:</strong> para gerenciar contas de serviço e dispositivo.</li>
+</ul>
             <div class="playbook-steps">
                 <div class="step"><strong>Contenção:</strong> Bloqueio da conta, reset de MFA e logout de sessões.</div>
                 <div class="step"><strong>Erradicação:</strong> Auditoria de regras de e-mail e remoção de backdoors.</div>
                 <div class="step"><strong>Recuperação:</strong> Reset de credenciais e validação de permissões.</div>
             </div>
         </div>
-        <div class="section">
-            <h4>Ferramentas de Mitigação</h4>
-            <div class="tools-container">
-                <span class="tool-tag">Microsoft Entra ID</span>
-                <span class="tool-tag">CyberArk PAM</span>
-                <span class="tool-tag">Okta</span>
-            </div>
+        
         </div>
     </div>
 </div>
@@ -205,13 +240,45 @@
 <div id="m-dados" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal('m-dados')">&times;</span>
-        <div class="modal-header"><h2>Roubo de Dados (Exfiltração)</h2></div>
+        <div class="modal-header"><h2>Roubo de Dados e Exfiltração</h2></div><div class="img-container">
+                <img src="roubo.jpg" alt="Rubo de dados">
+            </div>
+
         <div class="section">
             <h4>Descrição do Vetor</h4>
             <p>Transferência de grandes volumes de dados via protocolos como HTTPS, FTP ou DNS Tunneling.</p>
+            <br>
+<h4><strong>Métodos e Vetores de Ataque Comuns</strong></h4>
+
+<dt><strong>Phishing e Engenharia Social: </strong>Frequentemente, o ponto de entrada inicial. Os funcionários são enganados para revelar credenciais ou instalar software malicioso, o que concede acesso à rede.</dt>
+
+<dt><strong>Malware e Ransomware: </strong>Softwares maliciosos, como Trojans, keyloggers e RATs (cavalos de Tróia de acesso remoto), são usados para extrair dados ao longo do tempo. O ransomware moderno muitas vezes combina a criptografia de dados com a exfiltração, ameaçando divulgar as informações caso o resgate não seja pago (dupla extorsão).</dt>
+
+<dt><strong>Exploração de Vulnerabilidades de Software: </strong>Falhas em softwares desatualizados, sistemas operacionais ou configurações incorretas de nuvem podem ser exploradas para obter acesso.</dt>
+
+<dt><strong>Ameaças Internas (Insider Threats): </strong>Funcionários ou contratados, mal-intencionados ou descuidados, podem abusar de seus privilégios de acesso para roubar dados, seja por meio de dispositivos físicos (como USBs) ou serviços de nuvem não autorizados.</dt>
+
+<dt><strong>Túneis e Canais de Comunicação Ocultos: </strong>Técnicas como tunelamento de DNS, HTTP/HTTPS ou ICMP são usadas para disfarçar a transferência de dados como tráfego de rede normal e evitar a detecção por firewalls tradicionais.</dt>
+
+<dt><strong>Roubo de Credenciais: </strong>O acesso a credenciais válidas (muitas vezes de vazamentos anteriores ou ataques de força bruta) permite que os atacantes se movam lateralmente dentro da rede do servidor para encontrar e exfiltrar dados valiosos.</dt>
+<br>
+<h4><strong>Medidas de Prevenção e Mitigação</strong></h4>
+
+<p>A proteção eficaz dos servidores exige uma abordagem em camadas:</p>
+
+<ul>
+  <li><strong>Controles de Acesso Fortes: </strong>Implemente o princípio do privilégio mínimo (least privilege) e use autenticação multifator (MFA) para todos os acessos sensíveis.</li>
+  <li><strong>Criptografia de Dados: </strong>Criptografe os dados em repouso (no servidor) e em trânsito (durante a transferência) para garantir que permaneçam inúteis se forem interceptados.</li>
+  <li><strong>Atualizações e Gerenciamento de Patches: </strong>Mantenha todos os sistemas operacionais e softwares de servidor atualizados para corrigir vulnerabilidades de segurança conhecidas antes que possam ser exploradas.</li>
+  <li><strong>Segmentação de Rede:</strong> Divida a rede em segmentos menores. Isso limita a capacidade de um atacante de se mover lateralmente e acessar outros servidores, mesmo que um deles seja comprometido.</li>
+  <li><strong>Monitoramento e Auditoria de Logs</strong>: Monitore proativamente o tráfego de rede e os logs do servidor para detectar padrões de acesso anormais ou volumes incomuns de transferência de dados, que podem indicar exfiltração em andamento.</li>
+  <li>vFerramentas de Prevenção de Perda de Dados (DLP): </strong>Use soluções DLP para identificar, monitorar e proteger automaticamente dados confidenciais.</li>
+  <li><strong>Treinamento de Conscientização de Funcionários:</strong> Treinamentos regulares ajudam a mitigar o risco de erro humano, ensinando os funcionários a reconhecer tentativas de phishing e a seguir as melhores práticas de segurança.</li>
+  <li><strong>Auditorias de Segurança e Testes de Penetração Regulares:</strong> Avaliações proativas ajudam a identificar e corrigir quaisquer lacunas de segurança antes que um ataque ocorra.</li>
+</ul>
         </div>
         <div class="section">
-            <h4>Ações do Playbook (NIST)</h4>
+            <h4>Ações </h4>
             <div class="playbook-steps">
                 <div class="step"><strong>Contenção:</strong> Isolamento do host e bloqueio de tráfego de saída (Egress).</div>
                 <div class="step"><strong>Erradicação:</strong> Identificação do script de exfiltração e limpeza de C2.</div>
@@ -219,12 +286,7 @@
             </div>
         </div>
         <div class="section">
-            <h4>Ferramentas de Mitigação</h4>
-            <div class="tools-container">
-                <span class="tool-tag">Digital Guardian</span>
-                <span class="tool-tag">Forcepoint DLP</span>
-                <span class="tool-tag">Varonis</span>
-            </div>
+            
         </div>
     </div>
 </div>
@@ -232,26 +294,62 @@
 <div id="m-lateral" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal('m-lateral')">&times;</span>
-        <div class="modal-header"><h2>Movimentação Lateral</h2></div>
+        <div class="modal-header"><h2>Persistência e Movimentação Lateral</h2></div>
+        <div class="img-container">
+                <img src="persistencia.jpg" alt="Persistência">
+            </div>
         <div class="section">
             <h4>Descrição do Vetor</h4>
             <p>Exploração de protocolos como SMB, RPC e WMI para saltar entre servidores internos.</p>
+            <br>
+            <h4>Persistência em Servidores</h4>
+<p>A persistência refere-se às técnicas usadas para manter o acesso a um servidor, mesmo após reinicializações, mudanças de credenciais ou desconexões.</p>
+
+<p><strong>Técnicas Comuns:</strong></p>
+<ul>
+  <li><strong>Serviços e Tarefas Agendadas:</strong> Criação de serviços maliciosos no Windows ou cron jobs no Linux para executar payloads automaticamente.</li>
+  <li><strong>Modificação de Registros (Windows):</strong> Adicionar entradas em chaves como Run ou RunOnce para iniciar código malicioso durante o boot.</li>
+  <li><strong>Web Shells:</strong> Upload de scripts (PHP, ASPX, JSP) em servidores web para obter controle remoto.</li>
+  <li><strong>Contas de Usuário Criadas:</strong> Criação de novas contas com privilégios de administrador ou uso de contas de serviço existentes.</li>
+  <li><strong>Chaves SSH (Linux/Unix):</strong> Adicionar chaves públicas ao arquivo authorized_keys para acesso remoto fácil e indetectável.</li>
+</ul>
+
+<h4>Movimentação Lateral</h4>
+<p>A movimentação lateral é o processo pelo qual os invasores navegam furtivamente de um sistema para outro dentro de uma rede já comprometida.</p>
+
+<p><strong>Objetivos:</strong> Encontrar dados sensíveis, escalar privilégios (tornar-se administrador de domínio) e encontrar o Controlador de Domínio.</p>
+
+<p><strong>Técnicas Comuns:</strong></p>
+<ul>
+  <li><strong>Pass-the-Hash (PtH) / Pass-the-Ticket (PtT):</strong> Uso de hashes de senha ou tickets Kerberos roubados para autenticar em outros servidores sem precisar decifrar a senha.</li>
+  <li><strong>Uso de Ferramentas Legítimas (Living off the Land):</strong> Aproveitamento de ferramentas nativas como WMI, PowerShell, SMB e RDP para executar comandos remotamente, dificultando a detecção.</li>
+  <li><strong>Internal Spear Phishing:</strong> Envio de e-mails de phishing internos para roubar credenciais de outros usuários.</li>
+  <li><strong>Exploração de Compartilhamentos de Rede:</strong> Acesso a compartilhamentos SMB para buscar arquivos de configuração ou senhas em texto puro.</li>
+</ul>
+
+<h4>Prevenção e Detecção</h4>
+<p>A proteção contra essas táticas baseia-se em monitoramento contínuo e na redução da superfície de ataque.</p>
+
+<ul>
+  <li><strong>Segurança de Identidade:</strong> Implementar autenticação multifator (MFA) em todos os acessos, especialmente RDP e VPN.</li>
+  <li><strong>Princípio do Menor Privilégio:</strong> Limitar o número de usuários com direitos administrativos e restringir o uso de contas de administrador local.</li>
+  <li><strong>Segmentação de Rede:</strong> Isolar servidores críticos de estações de trabalho comuns para dificultar a movimentação lateral.</li>
+  <li><strong>Monitoramento (SIEM/EDR):</strong> Detectar comportamentos anômalos, como uso excessivo de WMI, conexões RDP suspeitas ou criação de novos serviços.</li>
+  <li><strong>Gestão de Patches:</strong> Manter servidores atualizados para evitar a exploração de vulnerabilidades que facilitam a entrada inicial.</li>
+</ul>
+
         </div>
         <div class="section">
-            <h4>Ações do Playbook (NIST)</h4>
+            <h4>Ações </h4>
             <div class="playbook-steps">
                 <div class="step"><strong>Contenção:</strong> Microsegmentação de rede e isolamento de VLANs.</div>
                 <div class="step"><strong>Erradicação:</strong> Remoção de tickets Kerberos e ferramentas de hacking.</div>
-                <div class="step"><strong>Recuperação:</strong> Implementação de políticas de Least Privilege.</div>
+                <div class="step"><strong>Recuperação:</strong> Implementação de políticas de Privilégios.</div>
             </div>
         </div>
         <div class="section">
-            <h4>Ferramentas de Mitigação</h4>
-            <div class="tools-container">
-                <span class="tool-tag">VMware NSX</span>
-                <span class="tool-tag">CrowdStrike EDR</span>
-                <span class="tool-tag">Darktrace</span>
-            </div>
+           
+            
         </div>
     </div>
 </div>
@@ -259,13 +357,45 @@
 <div id="m-recursos" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal('m-recursos')">&times;</span>
-        <div class="modal-header"><h2>Apropriação de Recursos</h2></div>
+        <div class="modal-header"><h2>Infraestrutura e abuso de recursos</h2></div>
+        <div class="img-container">
+                <img src="infraestutura.jpg" alt="Infraestrutura">
+            </div>
         <div class="section">
             <h4>Descrição do Vetor</h4>
             <p>Injeção de binários de mineração (Cryptojacking) ou scripts de automação de botnets.</p>
+            <h4>Infraestrutura de Servidores</h4>
+<p>A infraestrutura de servidores constitui o conjunto de recursos físicos (hardware), virtuais, de rede e sistemas de armazenamento que suportam o funcionamento de aplicações e dados. O abuso de recursos ocorre quando esses elementos — CPU, memória RAM, largura de banda, armazenamento ou energia — são consumidos de forma indevida, excessiva ou maliciosa, comprometendo o desempenho, a segurança e aumentando os custos operacionais.</p>
+
+<h4>Principais Formas de Abuso de Recursos</h4>
+<ul>
+  <li><strong>Mineração de Criptomoedas (Cryptojacking):</strong> Hackers comprometem servidores para minerar criptomoedas, usando 100% da CPU e RAM, o que torna o sistema lento ou inoperante.</li>
+  <li><strong>Ataques DDoS (Negação de Serviço):</strong> Servidores são usados para enviar tráfego massivo a outros alvos ou são alvos de tráfego, saturando a banda de rede.</li>
+  <li><strong>Armazenamento de Dados Ilícitos:</strong> Uso de espaço de armazenamento para hospedar conteúdo pirata, arquivos ilegais ou malware.</li>
+  <li><strong>Spamming:</strong> Utilizar a infraestrutura de e-mail do servidor para envio de spam, o que resulta na inclusão do IP em listas negras (blacklist).</li>
+  <li><strong>Peculato Digital:</strong> Uso indevido da infraestrutura por colaboradores ou terceiros para benefício próprio, como hospedagem de sites pessoais ou uso de poder de processamento para fins privados.</li>
+</ul>
+
+<h4>Impactos da Falta de Gestão da Infraestrutura</h4>
+<ul>
+  <li><strong>Desempenho Degradado:</strong> Lentidão extrema nas aplicações e serviços.</li>
+  <li><strong>Altos Custos:</strong> Na nuvem, o abuso resulta em contas elevadas pelo uso excessivo de recursos (instâncias, tráfego de dados).</li>
+  <li><strong>Danos à Reputação:</strong> Sites fora do ar ou IP bloqueado por spam.</li>
+  <li><strong>Interrupção de Serviços:</strong> Indisponibilidade dos serviços críticos para a empresa.</li>
+</ul>
+
+<h4>Melhores Práticas de Segurança e Monitoramento</h4>
+<ul>
+  <li><strong>Monitoramento Ativo:</strong> Implementar ferramentas de monitoramento de rede e sistemas (SCADA, EAM) para monitorar em tempo real CPU, RAM e tráfego de rede.</li>
+  <li><strong>Zero Trust (Confiança Zero):</strong> Adotar o modelo de segurança onde nenhuma solicitação é confiável por padrão, protegendo dados sensíveis.</li>
+  <li><strong>Manutenção Preventiva:</strong> Realizar verificações periódicas nos sistemas para evitar falhas ou abusos.</li>
+  <li><strong>Gestão de Ativos:</strong> Manter controle sobre todas as licenças, softwares e equipamentos físicos.</li>
+  <li><strong>Política de Segurança:</strong> Definir regras rígidas de uso de recursos e realizar auditorias regulares.</li>
+</ul>
+
         </div>
         <div class="section">
-            <h4>Ações do Playbook (NIST)</h4>
+            <h4>Ações </h4>
             <div class="playbook-steps">
                 <div class="step"><strong>Contenção:</strong> Encerramento de processos de alta CPU e suspensão de cronjobs.</div>
                 <div class="step"><strong>Erradicação:</strong> Remoção de arquivos maliciosos e bins ocultos.</div>
@@ -273,12 +403,7 @@
             </div>
         </div>
         <div class="section">
-            <h4>Ferramentas de Mitigação</h4>
-            <div class="tools-container">
-                <span class="tool-tag">Zabbix</span>
-                <span class="tool-tag">Sysdig</span>
-                <span class="tool-tag">Tenable.io</span>
-            </div>
+            
         </div>
     </div>
 </div>
@@ -286,13 +411,44 @@
 <div id="m-ddos" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal('m-ddos')">&times;</span>
-        <div class="modal-header"><h2>Ataque DDoS (Distribuído)</h2></div>
+        <div class="modal-header"><h2>Ataque DDoS </h2></div>
+        <div class="img-container">
+                <img src="ddos.jpg" alt="DDoS">
+            </div>
         <div class="section">
             <h4>Descrição do Vetor</h4>
             <p>Ataques volumétricos externos (UDP/TCP Flood) ou de Camada 7 (HTTP Flood).</p>
+            <h4>Funcionamento</h4>
+<p>Os invasores usam uma rede de "zumbis" (computadores comprometidos) para enviar solicitações simultâneas ao alvo, esgotando sua capacidade de resposta (largura de banda, CPU, memória). Esse tipo de ataque é conhecido como <strong>DDoS (Distributed Denial of Service)</strong>.</p>
+
+<h4>Tipos Comuns</h4>
+<ul>
+  <li><strong>Volumétricos:</strong> Visa saturar a largura de banda da rede alvo.</li>
+  <li><strong>Protocolo:</strong> Explora vulnerabilidades nas camadas 3 e 4 do modelo OSI.</li>
+  <li><strong>Camada de Aplicação (L7):</strong> Foca em aplicações web (como HTTP/HTTPS), imitando tráfego real para consumir recursos do servidor.</li>
+</ul>
+
+<h4>Consequências</h4>
+<ul>
+  <li><strong>Queda do serviço:</strong> Indisponibilidade total ou parcial de sistemas e aplicações.</li>
+  <li><strong>Interrupção de operações:</strong> Impacto direto em processos críticos da empresa.</li>
+  <li><strong>Prejuízos financeiros:</strong> Custos elevados com paralisações e perda de receita.</li>
+  <li><strong>Danos à reputação:</strong> Clientes e parceiros perdem confiança na empresa.</li>
+</ul>
+
+<h4>Mitigação</h4>
+<ul>
+  <li><strong>Serviços de proteção baseados em nuvem:</strong> Soluções como Cloudflare, Akamai ou AWS Shield ajudam a absorver e dispersar o tráfego malicioso.</li>
+  <li><strong>Firewalls de aplicação web (WAF):</strong> Filtram tráfego malicioso direcionado a aplicações web.</li>
+  <li><strong>Redes Anycast:</strong> Distribuem solicitações entre múltiplos servidores geograficamente dispersos, reduzindo o impacto do ataque.</li>
+  <li><strong>Balanceadores de carga:</strong> Distribuem o tráfego entre diferentes servidores, evitando sobrecarga em um único ponto.</li>
+  <li><strong>Monitoramento contínuo:</strong> Ferramentas de SIEM e EDR ajudam a detectar padrões anômalos de tráfego em tempo real.</li>
+  <li><strong>Planos de resposta a incidentes:</strong> Definir previamente ações e responsabilidades para reagir rapidamente a ataques DDoS.</li>
+</ul>
+
         </div>
         <div class="section">
-            <h4>Ações do Playbook (NIST)</h4>
+            <h4>Ações </h4>
             <div class="playbook-steps">
                 <div class="step"><strong>Detecção:</strong> Alerta de SIEM por anomalia de tráfego.</div>
                 <div class="step"><strong>Contenção:</strong> Ativação de Scrubbing Center e Geo-blocking.</div>
@@ -300,12 +456,8 @@
             </div>
         </div>
         <div class="section">
-            <h4>Ferramentas de Mitigação</h4>
-            <div class="tools-container">
-                <span class="tool-tag">Cloudflare</span>
-                <span class="tool-tag">AWS Shield</span>
-                <span class="tool-tag">Arbor Networks</span>
-            </div>
+           
+           
         </div>
     </div>
 </div>
@@ -313,13 +465,41 @@
 <div id="m-dos" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal('m-dos')">&times;</span>
-        <div class="modal-header"><h2>Ataque DoS (Local)</h2></div>
+        <div class="modal-header"><h2>Ataque DoS </h2></div>
+        <div class="img-container">
+                <img src="dos.jpg" alt="DoS">
+            </div>
         <div class="section">
             <h4>Descrição do Vetor</h4>
             <p>Esgotamento de recursos de um serviço específico através de vulnerabilidades conhecidas.</p>
+            <h4>Ataques DoS (Denial of Service)</h4>
+<p>Esses ataques se tornaram menos predominantes, pois os ataques DDoS têm maior capacidade disruptiva e são relativamente fáceis de criar devido às ferramentas disponíveis. Na realidade, a maioria dos ataques DoS também pode ser transformada em ataques DDoS.</p>
+
+<h4>Ataques Históricos Comuns de DoS</h4>
+<ul>
+  <li><strong>Ataque Smurf:</strong> Um ataque DoS previamente explorado no qual um ator malicioso utiliza o endereço de broadcast da rede vulnerável enviando pacotes falsificados, resultando na inundação de um endereço de IP visado.</li>
+  <li><strong>Inundação Ping:</strong> Esse ataque simples de negação de serviço baseia-se em sobrecarregar um alvo com pacotes ICMP (ping). Ao inundar um alvo com mais pings do que ele é capaz de responder com eficiência, pode ocorrer a negação de serviço. Esse ataque também pode ser usado como um ataque DDoS.</li>
+  <li><strong>Ping da Morte:</strong> Muitas vezes confundido com um ataque de inundação ping, um ataque de ping da morte envolve o envio de um pacote malformado para uma máquina visada, resultando em comportamento prejudicial, como falhas do sistema.</li>
+</ul>
+
+<h4>Impactos</h4>
+<ul>
+  <li><strong>Indisponibilidade de serviços:</strong> Sistemas e aplicações ficam inacessíveis.</li>
+  <li><strong>Interrupção de operações críticas:</strong> Afeta diretamente processos empresariais essenciais.</li>
+  <li><strong>Perda de confiança:</strong> Usuários e clientes podem abandonar serviços instáveis.</li>
+</ul>
+
+<h4>Mitigação</h4>
+<ul>
+  <li><strong>Atualização de sistemas:</strong> Corrigir vulnerabilidades conhecidas que podem ser exploradas em ataques DoS.</li>
+  <li><strong>Configuração adequada de rede:</strong> Bloquear pacotes malformados e limitar tráfego ICMP.</li>
+  <li><strong>Firewalls e IDS/IPS:</strong> Detectar e bloquear tráfego suspeito antes que cause impacto.</li>
+  <li><strong>Monitoramento contínuo:</strong> Identificar padrões anômalos de tráfego em tempo real.</li>
+</ul>
+
         </div>
         <div class="section">
-            <h4>Ações do Playbook (NIST)</h4>
+            <h4>Ações </h4>
             <div class="playbook-steps">
                 <div class="step"><strong>Contenção:</strong> Rate Limiting local e filtragem de IPs ofensivos.</div>
                 <div class="step"><strong>Erradicação:</strong> Aplicação de patches de software e hardening.</div>
@@ -327,12 +507,7 @@
             </div>
         </div>
         <div class="section">
-            <h4>Ferramentas de Mitigação</h4>
-            <div class="tools-container">
-                <span class="tool-tag">Fail2Ban</span>
-                <span class="tool-tag">Iptables</span>
-                <span class="tool-tag">F5 WAF</span>
-            </div>
+            
         </div>
     </div>
 </div>
